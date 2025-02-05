@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Quiz</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="logic.js"></script>
+</head>
+
+<body>
+    <div id="first">
+        <div class="card">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="card-inner">
+                <div id="c">
+                    <input type="text" placeholder="Enter your name" style="border-radius: 10px;" id="name"><br>
+                    <button onclick="sb()" style="margin-top: 20px;">Submit</button>
+                </div>
+                <div id="start" style="display: none;">
+                    <center><button onclick="fd()">Click to Start</button></center>
+                </div>
+                <h1 id="title" style="color: greenyellow;">Quick Quiz</h1>
+            </div>
+        </div>
+    </div>
+    <div id="second" style="display: none;">
+        <center>
+            <h1>Quick Quiz</h1>
+        </center>
+        <div id="question-container">
+            <center>
+                <p id="question">Question will appear here</p>
+            </center>
+            <span style="color: aqua;">
+                <p id="timer" style="margin-left: 50%;">Time left: <span id="time-left">30</span>s</p>
+            </span>
+        </div>
+        <center>
+        <div id="options-container">
+            <table>
+            <tr>
+                <td><button class="option" onclick="checkAnswer('A')">Option A</button></td>
+                <td><button class="option" onclick="checkAnswer('B')">Option B</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="option" onclick="checkAnswer('C')">Option C</button>
+                </td>
+                <td>
+                    <button class="option" onclick="checkAnswer('D')">Option D</button>
+                </td>
+            </tr>
+            </table>
+        </div>
+                        <!-- From Uiverse.io by andrew-demchenk0 --> 
+<div class="cube-loader" style="margin-top: 100px;">
+    <!-- <div class="cube-top"></div> -->
+    <div class="cube-wrapper">
+      <span style="--i:0" class="cube-span"></span>
+      <span style="--i:1" class="cube-span"></span>
+      <span style="--i:2" class="cube-span"></span>
+      <span style="--i:3" class="cube-span"></span>
+    </div>
+  </div>
+        </center>
+        <div id="result-container">
+            <p id="result" style="top: 10px; margin-left: 40%;"></p>
+        </div>
+    </div>
+    <div id="resultfinal" style="display: none;">
+        <div class="card">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="card-inner">
+                <div id="c">
+                    <p id="final-result">Result will display here:</p>
+                    <center><button onclick="laststage()">Click to Start</button></center>
+                </div>
+                <h1 id="title">Quick Quiz</h1>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userName;
+        let timer;
+        let timeLeft = 30;
+
+        function fd() {
+            let currentQuestionIndex = 0;
+            let score = 0;
+            document.getElementById('first').style.display = 'none';
+            document.getElementById('second').style.display = 'block';
+            loadQuestion(); // Load the first question when starting
+        }
+
+        function sb() {
+            document.getElementById('c').style.display = 'none';
+            document.getElementById('start').style.display = 'block';
+            userName = document.getElementById('name').value; // Capture the user's name
+        }
+
+        function reset() {
+            document.body.style.backgroundColor = document.body.style.backgroundColor === "lightblue" ? "#212121" : "lightblue";
+        }
+
+        function resultbackground() {
+            document.getElementById('second').style.display = 'none';
+            const resultFinalDiv = document.getElementById('resultfinal');
+            resultFinalDiv.style.display = 'block';
+            document.getElementById('final-result').textContent = `Quiz Completed! ${userName}, your score is: ${score}`;
+        }
+
+        function laststage() {
+            location.reload();
+        }
+
+        const questions = [
+            {
+                question: "Who is known as the 'Father of the Nation' in India?",
+                options: {
+                    A: "Mahatma Gandhi",
+                    B: "Jawaharlal Nehru",
+                    C: "Sardar Vallabhbhai Patel",
+                    D: "B. R. Ambedkar"
+                },
+                correct: "A"
+            },
+            {
+                question: "What is the capital of India?",
+                options: {
+                    A: "Mumbai",
+                    B: "New Delhi",
+                    C: "Chennai",
+                    D: "Kolkata"
+                },
+                correct: "B"
+            },
+            {
+                question: "Who is the author of the book 'To Kill a Mockingbird'?",
+                options: {
+                    A: "F. Scott Fitzgerald",
+                    B: "Harper Lee",
+                    C: "Jane Austen",
+                    D: "J.K. Rowling"
+                },
+                correct: "B"
+            },
+            {
+                question: "What is the largest planet in our solar system?",
+                options: {
+                    A: "Earth",
+                    B: "Saturn",
+                    C: "Jupiter",
+                    D: "Uranus"
+                },
+                correct: "C"
+            },
+            {
+                question: "Who is the lead singer of the rock band 'Queen'?",
+                options: {
+                    A: "Freddie Mercury",
+                    B: "Brian May",
+                    C: "Roger Taylor",
+                    D: "John Deacon"
+                },
+                correct: "A"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            clearInterval(timer);
+            timeLeft = 30;
+            document.getElementById('time-left').textContent = timeLeft;
+            timer = setInterval(updateTimer, 1000);
+
+            const questionData = questions[currentQuestionIndex];
+            document.getElementById('question').textContent = questionData.question;
+            document.querySelectorAll('.option').forEach((button, index) => {
+                button.textContent = Object.values(questionData.options)[index];
+            });
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById('time-left').textContent = timeLeft;
+            } else {
+                clearInterval(timer);
+                checkAnswer(null); // Automatically move to the next question if time runs out
+            }
+        }
+
+        function checkAnswer(answer) {
+            const questionData = questions[currentQuestionIndex];
+            if (answer === questionData.correct) {
+                score += 10;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                clearInterval(timer);
+                resultbackground();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuestion();
+        });
+    </script>
+</body>
+<script src="jquery-3.7.1.min.js"></script>
+
+</html>
